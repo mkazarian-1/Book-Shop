@@ -13,7 +13,7 @@ public class BookShopApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(){
+    public CommandLineRunner commandLineRunner() {
         return args -> {
             System.out.println("123");
         };
