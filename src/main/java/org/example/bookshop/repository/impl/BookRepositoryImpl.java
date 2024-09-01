@@ -2,7 +2,6 @@ package org.example.bookshop.repository.impl;
 
 import jakarta.persistence.criteria.CriteriaQuery;
 import java.util.List;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.bookshop.exception.DataProcessingException;
 import org.example.bookshop.model.Book;
