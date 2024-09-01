@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class BookShopApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(BookShopApplication.class, args);
     }
@@ -18,5 +17,4 @@ public class BookShopApplication {
             System.out.println("123");
         };
     }
-
 }
