@@ -1,6 +1,7 @@
 package org.example.bookshop.repository.impl;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.example.bookshop.exception.DataProcessingException;
 import org.example.bookshop.model.Book;
@@ -41,8 +42,17 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            Query<Book> query = session.createQuery("FROM Book",Book.class);
+            Query<Book> query = session.createQuery("FROM Book", Book.class);
             return query.getResultList();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get all books", e);
+        }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.find(Book.class, id));
         } catch (Exception e) {
             throw new DataProcessingException("Can't get all books", e);
         }
