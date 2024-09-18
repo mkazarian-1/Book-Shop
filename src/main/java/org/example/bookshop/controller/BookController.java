@@ -2,6 +2,7 @@ package org.example.bookshop.controller;
 
 import java.util.List;
 import org.example.bookshop.dto.BookDto;
+import org.example.bookshop.dto.BookSearchParametersDto;
 import org.example.bookshop.dto.CreateBookRequestDto;
 import org.example.bookshop.dto.UpdateBookRequestDto;
 import org.example.bookshop.service.BookService;
@@ -33,6 +34,11 @@ public class BookController {
         return bookService.getById(id);
     }
 
+    @GetMapping("/search")
+    public List<BookDto> getAllBySpecification(BookSearchParametersDto bookSearchParametersDto) {
+        return bookService.findAllByParam(bookSearchParametersDto);
+    }
+
     @PostMapping
     public BookDto createBook(@RequestBody CreateBookRequestDto bookRequestDto) {
         return bookService.save(bookRequestDto);
@@ -49,6 +55,4 @@ public class BookController {
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);
     }
-
-
 }

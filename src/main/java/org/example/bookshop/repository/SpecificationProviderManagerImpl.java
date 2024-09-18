@@ -1,20 +1,22 @@
 package org.example.bookshop.repository;
 
-import lombok.RequiredArgsConstructor;
-import org.example.bookshop.model.Book;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SpecificationProviderManagerImpl<Book> implements SpecificationProviderManager<Book> {
-    List<SpecificationProvider<Book>> bookSpecificationProviders;
+public class SpecificationProviderManagerImpl<T>
+        implements SpecificationProviderManager<T> {
+
+    private final List<SpecificationProvider<T>> bookSpecificationProviders;
+
     @Override
-    public SpecificationProvider<Book> getSpecificationProvider(String key) {
+    public SpecificationProvider<T> getSpecificationProvider(String key) {
         return bookSpecificationProviders.stream()
-                .filter(b -> b.getKey().equals(key))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("There is no SpecificationProvider with this key" + key));
+            .filter(b -> b.getKey().equals(key))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException(
+                    "There is no SpecificationProvider with this key" + key));
     }
 }
