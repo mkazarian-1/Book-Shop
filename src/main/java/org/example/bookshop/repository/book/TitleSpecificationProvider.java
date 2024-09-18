@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TitleSpecificationProvider implements SpecificationProvider<Book> {
 
-    private final static String CHARACTERISTIC = "title";
+    private static final String CHARACTERISTIC = "title";
 
     @Override
     public String getKey() {
