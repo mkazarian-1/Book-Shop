@@ -1,6 +1,8 @@
 package org.example.bookshop.repository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,7 @@ public class SpecificationProviderManagerImpl<T>
         return bookSpecificationProviders.stream()
             .filter(b -> b.getKey().equals(key))
             .findFirst()
-            .orElseThrow(() -> new RuntimeException(
+            .orElseThrow(() -> new NoSuchElementException(
                     "There is no SpecificationProvider with this key" + key));
     }
 }
