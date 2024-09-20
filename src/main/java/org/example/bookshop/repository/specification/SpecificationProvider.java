@@ -1,4 +1,4 @@
-package org.example.bookshop.repository;
+package org.example.bookshop.repository.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 
