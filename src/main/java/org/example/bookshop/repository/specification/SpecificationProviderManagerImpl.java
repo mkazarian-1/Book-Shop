@@ -1,4 +1,4 @@
-package org.example.bookshop.repository;
+package org.example.bookshop.repository.specification;
 
 import java.util.List;
 import java.util.NoSuchElementException;

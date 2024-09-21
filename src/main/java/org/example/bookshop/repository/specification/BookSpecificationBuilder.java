@@ -1,4 +1,4 @@
-package org.example.bookshop.repository;
+package org.example.bookshop.repository.specification;
 
 import lombok.RequiredArgsConstructor;
 import org.example.bookshop.dto.BookSearchParametersDto;

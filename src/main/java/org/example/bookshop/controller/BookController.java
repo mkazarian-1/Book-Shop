@@ -1,5 +1,6 @@
 package org.example.bookshop.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import org.example.bookshop.dto.BookDto;
 import org.example.bookshop.dto.BookSearchParametersDto;
@@ -40,13 +41,13 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody CreateBookRequestDto bookRequestDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto) {
         return bookService.save(bookRequestDto);
     }
 
     @PutMapping("/{id}")
     public BookDto updateBook(@PathVariable Long id,
-                              @RequestBody UpdateBookRequestDto bookRequestDto) {
+                              @RequestBody @Valid UpdateBookRequestDto bookRequestDto) {
         return bookService.update(bookRequestDto, id);
     }
 

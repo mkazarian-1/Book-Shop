@@ -1,8 +1,8 @@
-package org.example.bookshop.repository.book;
+package org.example.bookshop.repository.specification.book;
 
 import java.util.Arrays;
 import org.example.bookshop.model.Book;
-import org.example.bookshop.repository.SpecificationProvider;
+import org.example.bookshop.repository.specification.SpecificationProvider;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 

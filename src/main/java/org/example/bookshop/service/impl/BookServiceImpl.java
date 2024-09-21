@@ -10,7 +10,7 @@ import org.example.bookshop.dto.UpdateBookRequestDto;
 import org.example.bookshop.mapper.BookMapper;
 import org.example.bookshop.model.Book;
 import org.example.bookshop.repository.BookRepository;
-import org.example.bookshop.repository.SpecificationBuilder;
+import org.example.bookshop.repository.specification.SpecificationBuilder;
 import org.example.bookshop.service.BookService;
 import org.springframework.stereotype.Service;
 
