@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/books")
 public class BookController {
-
     private final BookService bookService;
 
     @GetMapping
@@ -51,9 +50,11 @@ public class BookController {
     @GetMapping("/search")
     @Operation(summary = "Get all book by specification",
             description = "returns list of all books that "
-            + " match the specified parameter")
-    public List<BookDto> getAllBySpecification(BookSearchParametersDto bookSearchParametersDto) {
-        return bookService.findAllByParam(bookSearchParametersDto);
+            + " match the specified parameter"
+            + " (with pagination and sorting)")
+    public List<BookDto> getAllBySpecification(BookSearchParametersDto bookSearchParametersDto,
+                                               @PageableDefault(size = 5) Pageable pageable) {
+        return bookService.findAllByParam(bookSearchParametersDto, pageable);
     }
 
     @PostMapping
