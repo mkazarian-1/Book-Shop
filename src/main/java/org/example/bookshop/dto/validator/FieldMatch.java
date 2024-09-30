@@ -7,17 +7,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = UniqueValidator.class)
-@Target({ElementType.FIELD})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Unique {
-    String message() default "Element with this value already exists";
-
+@Constraint(validatedBy = FieldMatchValidator.class)
+public @interface FieldMatch {
+    String message() default "Fields do not match";
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 
-    Class<?> entity();
-
-    String fieldName();
+    String first();
+    String second();
 }

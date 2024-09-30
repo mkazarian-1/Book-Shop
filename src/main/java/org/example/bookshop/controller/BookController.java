@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.example.bookshop.dto.BookDto;
-import org.example.bookshop.dto.BookSearchParametersDto;
-import org.example.bookshop.dto.CreateBookRequestDto;
-import org.example.bookshop.dto.UpdateBookRequestDto;
+import org.example.bookshop.dto.book.BookDto;
+import org.example.bookshop.dto.book.BookSearchParametersDto;
+import org.example.bookshop.dto.book.CreateBookRequestDto;
+import org.example.bookshop.dto.book.UpdateBookRequestDto;
+import org.example.bookshop.exception.SavingException;
 import org.example.bookshop.service.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -60,7 +61,8 @@ public class BookController {
     @PostMapping
     @Operation(summary = "Create book",
             description = "return the newly created book if the creation went well")
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto)
+            throws SavingException {
         return bookService.save(bookRequestDto);
     }
 
@@ -68,7 +70,8 @@ public class BookController {
     @Operation(summary = "Update book",
             description = "return the update book if the update went well")
     public BookDto updateBook(@PathVariable Long id,
-                              @RequestBody @Valid UpdateBookRequestDto bookRequestDto) {
+                              @RequestBody @Valid UpdateBookRequestDto bookRequestDto)
+            throws SavingException {
         return bookService.update(bookRequestDto, id);
     }
 

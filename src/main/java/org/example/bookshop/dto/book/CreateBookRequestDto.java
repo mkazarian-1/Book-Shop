@@ -1,4 +1,4 @@
-package org.example.bookshop.dto;
+package org.example.bookshop.dto.book;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.bookshop.dto.validator.Unique;
-import org.example.bookshop.model.Book;
 
 @Getter
 @Setter
@@ -21,7 +19,6 @@ public class CreateBookRequestDto {
     @Min(value = 0)
     private BigDecimal price;
     @NotBlank
-    @Unique(entity = Book.class, fieldName = "isbn")
     @Pattern(
             regexp = "^\\d{3}-\\d{10}$",
             message = "Invalid ISBN format"

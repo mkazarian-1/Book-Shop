@@ -3,10 +3,11 @@ package org.example.bookshop.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.example.bookshop.dto.BookDto;
-import org.example.bookshop.dto.BookSearchParametersDto;
-import org.example.bookshop.dto.CreateBookRequestDto;
-import org.example.bookshop.dto.UpdateBookRequestDto;
+import org.example.bookshop.dto.book.BookDto;
+import org.example.bookshop.dto.book.BookSearchParametersDto;
+import org.example.bookshop.dto.book.CreateBookRequestDto;
+import org.example.bookshop.dto.book.UpdateBookRequestDto;
+import org.example.bookshop.exception.SavingException;
 import org.example.bookshop.mapper.BookMapper;
 import org.example.bookshop.model.Book;
 import org.example.bookshop.repository.BookRepository;
@@ -26,6 +27,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto save(CreateBookRequestDto book) {
+        if (bookRepository.existsByIsbn(book.getIsbn())) {
+            throw new SavingException("Book with current isbn already exist: " + book.getIsbn());
+        }
         return bookMapper.toDto(bookRepository.save(bookMapper.toModel(book)));
     }
 
@@ -41,7 +45,8 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> findAllByParam(BookSearchParametersDto bookSearchParametersDto,
                                         Pageable pageable) {
         return bookRepository
-                .findAll(specificationBuilder.build(bookSearchParametersDto), pageable)
+                .findAll(specificationBuilder
+                        .build(bookSearchParametersDto), pageable)
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
@@ -60,6 +65,12 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Can't find book by id:" + id));
+
+        if (!book.getIsbn().equals(requestDto.getIsbn())
+                && bookRepository.existsByIsbn(requestDto.getIsbn())) {
+            throw new SavingException(
+                    "Book with current isbn already exist: " + requestDto.getIsbn());
+        }
 
         bookMapper.updateBookFromDto(requestDto, book);
         return bookMapper.toDto(bookRepository.save(book));
