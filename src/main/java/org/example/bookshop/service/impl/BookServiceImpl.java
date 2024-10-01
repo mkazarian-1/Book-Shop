@@ -26,11 +26,12 @@ public class BookServiceImpl implements BookService {
     private final SpecificationBuilder<Book> specificationBuilder;
 
     @Override
-    public BookDto save(CreateBookRequestDto book) {
-        if (bookRepository.existsByIsbn(book.getIsbn())) {
-            throw new SavingException("Book with current isbn already exist: " + book.getIsbn());
+    public BookDto save(CreateBookRequestDto bookRequestDto) {
+        if (bookRepository.existsByIsbn(bookRequestDto.getIsbn())) {
+            throw new SavingException("Book with current isbn already exist: "
+                    + bookRequestDto.getIsbn());
         }
-        return bookMapper.toDto(bookRepository.save(bookMapper.toModel(book)));
+        return bookMapper.toDto(bookRepository.save(bookMapper.toModel(bookRequestDto)));
     }
 
     @Override

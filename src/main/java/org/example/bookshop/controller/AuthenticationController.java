@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.bookshop.dto.user.UserRegistrationRequestDto;
 import org.example.bookshop.dto.user.UserResponseDto;
 import org.example.bookshop.exception.RegistrationException;
-import org.example.bookshop.security.UserAuthenticationService;
+import org.example.bookshop.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthenticationController {
-    private final UserAuthenticationService userAuthenticationService;
+    private final UserService userService;
 
     @Operation(summary = "Registration book",
             description = "return the newly registered user (email must be unique)")
     @PostMapping("/registration")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {
-        return userAuthenticationService.register(request);
+        return userService.register(request);
     }
 }

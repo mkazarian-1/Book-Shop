@@ -37,7 +37,7 @@ public class CustomGlobalExceptionHandler {
 
         errors.put("error", e.getMessage());
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(SavingException.class)
@@ -47,6 +47,6 @@ public class CustomGlobalExceptionHandler {
 
         errors.put("error", e.getMessage());
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 }

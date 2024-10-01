@@ -2,8 +2,8 @@ package org.example.bookshop.dto.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.apache.commons.beanutils.BeanUtils;
-import org.example.bookshop.exception.DataProcessingException;
+import java.util.Objects;
+import org.springframework.beans.BeanWrapperImpl;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
     private String firstFieldName;
@@ -17,14 +17,8 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        try {
-            final Object firstObj = BeanUtils.getProperty(value, firstFieldName);
-            final Object secondObj = BeanUtils.getProperty(value, secondFieldName);
-
-            return (firstObj == null && secondObj == null)
-                    || (firstObj != null && firstObj.equals(secondObj));
-        } catch (Exception e) {
-            throw new DataProcessingException("Can't get value from the fields",e);
-        }
+        Object field = new BeanWrapperImpl(value).getPropertyValue(firstFieldName);
+        Object fieldMatch = new BeanWrapperImpl(value).getPropertyValue(secondFieldName);
+        return Objects.equals(field, fieldMatch);
     }
 }
