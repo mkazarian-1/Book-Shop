@@ -1,10 +1,10 @@
 package org.example.bookshop.service;
 
 import java.util.List;
-import org.example.bookshop.dto.BookDto;
-import org.example.bookshop.dto.BookSearchParametersDto;
-import org.example.bookshop.dto.CreateBookRequestDto;
-import org.example.bookshop.dto.UpdateBookRequestDto;
+import org.example.bookshop.dto.book.BookDto;
+import org.example.bookshop.dto.book.BookSearchParametersDto;
+import org.example.bookshop.dto.book.CreateBookRequestDto;
+import org.example.bookshop.dto.book.UpdateBookRequestDto;
 import org.springframework.data.domain.Pageable;
 
 public interface BookService {

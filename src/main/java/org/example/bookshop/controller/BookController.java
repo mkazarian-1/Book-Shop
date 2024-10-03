@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.example.bookshop.dto.BookDto;
-import org.example.bookshop.dto.BookSearchParametersDto;
-import org.example.bookshop.dto.CreateBookRequestDto;
-import org.example.bookshop.dto.UpdateBookRequestDto;
+import org.example.bookshop.dto.book.BookDto;
+import org.example.bookshop.dto.book.BookSearchParametersDto;
+import org.example.bookshop.dto.book.CreateBookRequestDto;
+import org.example.bookshop.dto.book.UpdateBookRequestDto;
+import org.example.bookshop.exception.DuplicateIsbnException;
 import org.example.bookshop.service.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -33,25 +34,26 @@ public class BookController {
 
     @GetMapping
     @Operation(summary = "Get all books (with pagination and sorting)",
-            description = "returns list"
-            + " of all available books"
-            + " by pages and give ability to sort books according to the specified parameters")
+            description = "Returns list"
+                    + " of all available books"
+                    + " by pages and give ability "
+                    + "to sort books according to the specified parameters")
     public List<BookDto> getAll(@PageableDefault(size = 5) Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id",
-            description = "returns the book by the specified parameter")
+            description = "Returns the book by the specified parameter")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.getById(id);
     }
 
     @GetMapping("/search")
     @Operation(summary = "Get all book by specification",
-            description = "returns list of all books that "
-            + " match the specified parameter"
-            + " (with pagination and sorting)")
+            description = "Returns list of all books that "
+                    + " match the specified parameter"
+                    + " (with pagination and sorting)")
     public List<BookDto> getAllBySpecification(BookSearchParametersDto bookSearchParametersDto,
                                                @PageableDefault(size = 5) Pageable pageable) {
         return bookService.findAllByParam(bookSearchParametersDto, pageable);
@@ -59,23 +61,27 @@ public class BookController {
 
     @PostMapping
     @Operation(summary = "Create book",
-            description = "return the newly created book if the creation went well")
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto) {
+            description = "Return the newly created book if the creation went well."
+                    + "Throws DuplicateIsbnException if the isbn already exists.")
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto)
+            throws DuplicateIsbnException {
         return bookService.save(bookRequestDto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update book",
-            description = "return the update book if the update went well")
+            description = "Return the update book if the update went well."
+                    + "Throws DuplicateIsbnException if the isbn already exists.")
     public BookDto updateBook(@PathVariable Long id,
-                              @RequestBody @Valid UpdateBookRequestDto bookRequestDto) {
+                              @RequestBody @Valid UpdateBookRequestDto bookRequestDto)
+            throws DuplicateIsbnException {
         return bookService.update(bookRequestDto, id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete book",
-            description = "return 204 status if delete went well")
+            description = "Return 204 status if delete went well")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);
     }
