@@ -3,8 +3,8 @@ package org.example.bookshop.exception.handler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.example.bookshop.exception.DuplicateIsbnException;
 import org.example.bookshop.exception.RegistrationException;
-import org.example.bookshop.exception.SavingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -40,9 +40,9 @@ public class CustomGlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(SavingException.class)
-    public ResponseEntity<Map<String, String>> handleSavingException(
-            SavingException e) {
+    @ExceptionHandler(DuplicateIsbnException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicateIsbnException(
+            DuplicateIsbnException e) {
         Map<String, String> errors = new HashMap<>();
 
         errors.put("error", e.getMessage());

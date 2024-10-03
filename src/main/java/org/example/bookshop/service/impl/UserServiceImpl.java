@@ -5,6 +5,7 @@ import org.example.bookshop.dto.user.UserRegistrationRequestDto;
 import org.example.bookshop.dto.user.UserResponseDto;
 import org.example.bookshop.exception.RegistrationException;
 import org.example.bookshop.mapper.UserMapper;
+import org.example.bookshop.model.User;
 import org.example.bookshop.repository.UserRepository;
 import org.example.bookshop.service.UserService;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,7 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("User with this email already exist");
         }
 
-        return userMapper.toDto(
-                userRepository.save(
-                        userMapper.toUser(requestDto)));
+        User user = userMapper.toUser(requestDto);
+        return userMapper.toDto(userRepository.save(user));
     }
 }

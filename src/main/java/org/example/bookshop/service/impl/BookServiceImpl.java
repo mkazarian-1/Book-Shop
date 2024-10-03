@@ -7,7 +7,7 @@ import org.example.bookshop.dto.book.BookDto;
 import org.example.bookshop.dto.book.BookSearchParametersDto;
 import org.example.bookshop.dto.book.CreateBookRequestDto;
 import org.example.bookshop.dto.book.UpdateBookRequestDto;
-import org.example.bookshop.exception.SavingException;
+import org.example.bookshop.exception.DuplicateIsbnException;
 import org.example.bookshop.mapper.BookMapper;
 import org.example.bookshop.model.Book;
 import org.example.bookshop.repository.BookRepository;
@@ -28,7 +28,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto save(CreateBookRequestDto bookRequestDto) {
         if (bookRepository.existsByIsbn(bookRequestDto.getIsbn())) {
-            throw new SavingException("Book with current isbn already exist: "
+            throw new DuplicateIsbnException("Book with current isbn already exist: "
                     + bookRequestDto.getIsbn());
         }
         return bookMapper.toDto(bookRepository.save(bookMapper.toModel(bookRequestDto)));
@@ -69,7 +69,7 @@ public class BookServiceImpl implements BookService {
 
         if (!book.getIsbn().equals(requestDto.getIsbn())
                 && bookRepository.existsByIsbn(requestDto.getIsbn())) {
-            throw new SavingException(
+            throw new DuplicateIsbnException(
                     "Book with current isbn already exist: " + requestDto.getIsbn());
         }
 

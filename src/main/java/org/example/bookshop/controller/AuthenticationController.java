@@ -13,16 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "User repository manager",
-        description = "Endpoints for User book repository management")
+@Tag(name = "User Authentication",
+        description = "Endpoints for managing user authentication and registration")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final UserService userService;
 
-    @Operation(summary = "Registration book",
-            description = "return the newly registered user (email must be unique)")
+    @Operation(summary = "Register a new user",
+            description = "Registers a new user in the system. The provided email must be unique. "
+                    + "Returns the newly registered user's details."
+                    + " Throws RegistrationException if the email already exists.")
     @PostMapping("/registration")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {
