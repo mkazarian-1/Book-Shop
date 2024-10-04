@@ -24,7 +24,8 @@ public class AuthenticationController {
     @Operation(summary = "Register a new user",
             description = "Registers a new user in the system. The provided email must be unique. "
                     + "Returns the newly registered user's details."
-                    + " Throws RegistrationException if the email already exists.")
+                    + " Throws RegistrationException if the email already exists."
+                    + "\nNecessary role: None")
     @PostMapping("/registration")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {

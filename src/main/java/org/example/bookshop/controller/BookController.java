@@ -14,6 +14,7 @@ import org.example.bookshop.service.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,14 +38,18 @@ public class BookController {
             description = "Returns list"
                     + " of all available books"
                     + " by pages and give ability "
-                    + "to sort books according to the specified parameters")
+                    + "to sort books according to the specified parameters"
+                    + "\nNecessary role: USER")
+    @PreAuthorize("hasAuthority('USER')")
     public List<BookDto> getAll(@PageableDefault(size = 5) Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id",
-            description = "Returns the book by the specified parameter")
+            description = "Returns the book by the specified parameter"
+                    + "\nNecessary role: USER")
+    @PreAuthorize("hasAuthority('USER')")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.getById(id);
     }
@@ -53,7 +58,9 @@ public class BookController {
     @Operation(summary = "Get all book by specification",
             description = "Returns list of all books that "
                     + " match the specified parameter"
-                    + " (with pagination and sorting)")
+                    + " (with pagination and sorting)"
+                    + "\nNecessary role: USER")
+    @PreAuthorize("hasAuthority('USER')")
     public List<BookDto> getAllBySpecification(BookSearchParametersDto bookSearchParametersDto,
                                                @PageableDefault(size = 5) Pageable pageable) {
         return bookService.findAllByParam(bookSearchParametersDto, pageable);
@@ -62,7 +69,9 @@ public class BookController {
     @PostMapping
     @Operation(summary = "Create book",
             description = "Return the newly created book if the creation went well."
-                    + "Throws DuplicateIsbnException if the isbn already exists.")
+                    + "Throws DuplicateIsbnException if the isbn already exists."
+                    + "\nNecessary role: ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto)
             throws DuplicateIsbnException {
         return bookService.save(bookRequestDto);
@@ -71,7 +80,9 @@ public class BookController {
     @PutMapping("/{id}")
     @Operation(summary = "Update book",
             description = "Return the update book if the update went well."
-                    + "Throws DuplicateIsbnException if the isbn already exists.")
+                    + "Throws DuplicateIsbnException if the isbn already exists."
+                    + "\nNecessary role: ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public BookDto updateBook(@PathVariable Long id,
                               @RequestBody @Valid UpdateBookRequestDto bookRequestDto)
             throws DuplicateIsbnException {
@@ -81,7 +92,9 @@ public class BookController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete book",
-            description = "Return 204 status if delete went well")
+            description = "Return 204 status if delete went well"
+                    + "\nNecessary role: ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);
     }
