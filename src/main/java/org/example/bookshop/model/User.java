@@ -35,7 +35,7 @@ public class User implements UserDetails {
     private String lastName;
     private String shippingAddress;
 
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

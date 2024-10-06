@@ -1,7 +1,6 @@
 package org.example.bookshop.mapper;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.util.HashSet;
 import java.util.Set;
 import org.example.bookshop.config.MapperConfig;
 import org.example.bookshop.dto.user.UserRegistrationRequestDto;
@@ -34,9 +33,8 @@ public interface UserMapper {
         Role userRole = roleRepository.findByRole(Role.RoleName.USER)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find role:" + Role.RoleName.USER));
-        Set<Role> roles = new HashSet<>();
-        roles.add(userRole);
-        user.setRoles(roles);
+
+        user.setRoles(Set.of(userRole));
     }
 }
 
