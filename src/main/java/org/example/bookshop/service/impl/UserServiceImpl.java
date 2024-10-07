@@ -6,14 +6,18 @@ import org.example.bookshop.dto.user.UserResponseDto;
 import org.example.bookshop.exception.RegistrationException;
 import org.example.bookshop.mapper.UserMapper;
 import org.example.bookshop.model.User;
+import org.example.bookshop.repository.RoleRepository;
 import org.example.bookshop.repository.UserRepository;
 import org.example.bookshop.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
     @Override
@@ -23,6 +27,8 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userMapper.toUser(requestDto);
+        userMapper.setPasswordAndRole(user, requestDto, passwordEncoder, roleRepository);
+
         return userMapper.toDto(userRepository.save(user));
     }
 }
