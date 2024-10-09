@@ -1,6 +1,8 @@
 package org.example.bookshop.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.bookshop.dto.user.UserLoginRequestDto;
+import org.example.bookshop.dto.user.UserLoginResponseDto;
 import org.example.bookshop.dto.user.UserRegistrationRequestDto;
 import org.example.bookshop.dto.user.UserResponseDto;
 import org.example.bookshop.exception.RegistrationException;
@@ -8,7 +10,11 @@ import org.example.bookshop.mapper.UserMapper;
 import org.example.bookshop.model.User;
 import org.example.bookshop.repository.RoleRepository;
 import org.example.bookshop.repository.UserRepository;
+import org.example.bookshop.security.JwtUtil;
 import org.example.bookshop.service.UserService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto) {
@@ -30,5 +38,15 @@ public class UserServiceImpl implements UserService {
         userMapper.setPasswordAndRole(user, requestDto, passwordEncoder, roleRepository);
 
         return userMapper.toDto(userRepository.save(user));
+    }
+
+    @Override
+    public UserLoginResponseDto login(UserLoginRequestDto loginRequestDto) {
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequestDto.getEmail(), loginRequestDto.getPassword())
+        );
+
+        return new UserLoginResponseDto(jwtUtil.generateToken(authentication.getName()));
     }
 }
