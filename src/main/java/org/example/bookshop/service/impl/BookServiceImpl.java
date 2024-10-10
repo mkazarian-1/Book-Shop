@@ -31,7 +31,7 @@ public class BookServiceImpl implements BookService {
             throw new DuplicateIsbnException("Book with current isbn already exist: "
                     + bookRequestDto.getIsbn());
         }
-        return bookMapper.toDto(bookRepository.save(bookMapper.toModel(bookRequestDto)));
+        return bookMapper.toDto(bookRepository.save(bookMapper.toEntity(bookRequestDto)));
     }
 
     @Override
@@ -48,6 +48,14 @@ public class BookServiceImpl implements BookService {
         return bookRepository
                 .findAll(specificationBuilder
                         .build(bookSearchParametersDto), pageable)
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDto> findAllByCategoriesId(Pageable pageable, Long categoryId) {
+        return bookRepository.findAllByCategoriesId(pageable, categoryId)
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();

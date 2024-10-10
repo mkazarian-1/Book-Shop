@@ -14,10 +14,12 @@ public interface BookService {
 
     List<BookDto> findAllByParam(BookSearchParametersDto bookSearchParametersDto,
                                  Pageable pageable);
+    List<BookDto> findAllByCategoriesId(Pageable pageable,Long categoryId);
 
     BookDto getById(Long id);
 
     BookDto update(UpdateBookRequestDto bookRequestDto, Long id);
 
     void deleteById(Long id);
+
 }
