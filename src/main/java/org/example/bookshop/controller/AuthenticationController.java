@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.bookshop.dto.user.UserLoginRequestDto;
+import org.example.bookshop.dto.user.UserLoginResponseDto;
 import org.example.bookshop.dto.user.UserRegistrationRequestDto;
 import org.example.bookshop.dto.user.UserResponseDto;
 import org.example.bookshop.exception.RegistrationException;
@@ -30,5 +32,15 @@ public class AuthenticationController {
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {
         return userService.register(request);
+    }
+
+    @Operation(summary = "User authorization",
+            description = "Authorizes the user in the system."
+                    + "Returns JWT token for 10 minutes."
+                    + "In case of incorrect email or password, a 401 status is returned"
+                    + "\nNecessary role: None")
+    @PostMapping("/login")
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto loginRequestDto) {
+        return userService.login(loginRequestDto);
     }
 }
