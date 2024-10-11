@@ -1,7 +1,7 @@
 package org.example.bookshop.dto.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.bookshop.dto.validator.FieldMatch;
@@ -11,7 +11,7 @@ import org.example.bookshop.dto.validator.FieldMatch;
 @FieldMatch(first = "password", second = "repeatPassword",message = "Passwords do not match")
 public class UserRegistrationRequestDto {
     @NotBlank
-    @Pattern(regexp = "^[^@]+@[^@]+\\.[^@]+$")
+    @Email
     private String email;
     @NotBlank
     private String password;
