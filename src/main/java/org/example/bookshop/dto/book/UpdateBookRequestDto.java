@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,4 +27,6 @@ public class UpdateBookRequestDto {
     private String isbn;
     private String description;
     private String coverImage;
+    @NotNull
+    private List<Long> categoryIds;
 }

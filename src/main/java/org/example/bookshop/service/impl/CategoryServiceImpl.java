@@ -1,8 +1,8 @@
 package org.example.bookshop.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.example.bookshop.dto.book.UpdateBookRequestDto;
 import org.example.bookshop.dto.category.CategoryDto;
 import org.example.bookshop.dto.category.CreateCategoryRequestDto;
 import org.example.bookshop.dto.category.UpdateCategoryRequestDto;
@@ -12,8 +12,6 @@ import org.example.bookshop.repository.CategoryRepository;
 import org.example.bookshop.service.CategoryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,10 +46,11 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book by id:" + id));
 
-        categoryMapper.updateCategoryFromDto(category,requestDto);
+        categoryMapper.updateCategoryFromDto(category, requestDto);
 
-        return categoryMapper.toDto(category);
+        return categoryMapper.toDto(categoryRepository.save(category));
     }
+
     @Override
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);

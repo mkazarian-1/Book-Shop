@@ -8,13 +8,12 @@ import org.example.bookshop.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-import java.lang.annotation.Target;
-
 @Mapper(config = MapperConfig.class)
 public interface CategoryMapper {
     CategoryDto toDto(Category category);
 
     Category toEntity(CreateCategoryRequestDto requestDto);
 
-    void updateCategoryFromDto(@MappingTarget Category category, UpdateCategoryRequestDto requestDto);
+    void updateCategoryFromDto(@MappingTarget Category category,
+                               UpdateCategoryRequestDto requestDto);
 }

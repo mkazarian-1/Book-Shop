@@ -3,6 +3,7 @@ package org.example.bookshop.exception.handler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.example.bookshop.exception.CategoryNotFoundException;
 import org.example.bookshop.exception.DuplicateIsbnException;
 import org.example.bookshop.exception.RegistrationException;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,16 @@ public class CustomGlobalExceptionHandler {
     @ExceptionHandler(DuplicateIsbnException.class)
     public ResponseEntity<Map<String, String>> handleDuplicateIsbnException(
             DuplicateIsbnException e) {
+        Map<String, String> errors = new HashMap<>();
+
+        errors.put("error", e.getMessage());
+
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCategoryNotFoundException(
+            CategoryNotFoundException e) {
         Map<String, String> errors = new HashMap<>();
 
         errors.put("error", e.getMessage());
