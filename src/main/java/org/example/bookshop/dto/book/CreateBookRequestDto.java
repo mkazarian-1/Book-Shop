@@ -2,8 +2,10 @@ package org.example.bookshop.dto.book;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Getter;
@@ -13,8 +15,10 @@ import lombok.Setter;
 @Setter
 public class CreateBookRequestDto {
     @NotBlank
+    @Size(max = 50)
     private String title;
     @NotBlank
+    @Size(max = 50)
     private String author;
     @NotNull
     @Min(value = 0)
@@ -25,8 +29,9 @@ public class CreateBookRequestDto {
             message = "Invalid ISBN format"
     )
     private String isbn;
+    @Size(max = 1000)
     private String description;
     private String coverImage;
-    @NotNull
+    @NotEmpty
     private List<Long> categoryIds;
 }

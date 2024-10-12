@@ -8,7 +8,6 @@ import org.example.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import org.example.bookshop.dto.book.BookSearchParametersDto;
 import org.example.bookshop.dto.book.CreateBookRequestDto;
 import org.example.bookshop.dto.book.UpdateBookRequestDto;
-import org.example.bookshop.exception.CategoryNotFoundException;
 import org.example.bookshop.exception.DuplicateIsbnException;
 import org.example.bookshop.mapper.BookMapper;
 import org.example.bookshop.model.Book;
@@ -106,7 +105,7 @@ public class BookServiceImpl implements BookService {
                 .filter(id -> !categoryRepository.existsById(id))
                 .findFirst()
                 .ifPresent(id -> {
-                    throw new CategoryNotFoundException(
+                    throw new EntityNotFoundException(
                             "Category with ID " + id + " does not exist");
                 });
     }

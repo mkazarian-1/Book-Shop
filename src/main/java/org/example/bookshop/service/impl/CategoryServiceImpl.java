@@ -31,23 +31,22 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto getById(Long id) {
         return categoryMapper.toDto(categoryRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can't find book by id:" + id)));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "There is no category with the specified ID:" + id)));
     }
 
     @Override
     public CategoryDto save(CreateCategoryRequestDto requestDto) {
-        return categoryMapper.toDto(
-                categoryRepository.save(
-                        categoryMapper.toEntity(requestDto)));
+        Category category = categoryMapper.toEntity(requestDto);
+        return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Override
     public CategoryDto update(Long id, UpdateCategoryRequestDto requestDto) {
         Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't find book by id:" + id));
-
+                () -> new EntityNotFoundException(
+                        "There is no category with the specified ID:" + id));
         categoryMapper.updateCategoryFromDto(category, requestDto);
-
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 

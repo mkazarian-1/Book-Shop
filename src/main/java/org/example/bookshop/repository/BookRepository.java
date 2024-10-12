@@ -17,14 +17,11 @@ public interface BookRepository extends JpaRepository<Book,Long>, JpaSpecificati
     List<Book> findAllByCategoriesId(Pageable pageable, Long categoryId);
 
     @EntityGraph(attributePaths = "categories")
-    @NonNull
-    Page<Book> findAll(@NonNull Pageable pageable);
+    Page<Book> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = "categories")
-    @NonNull
-    Page<Book> findAll(Specification<Book> specification, @NonNull Pageable pageable);
+    Page<Book> findAll(Specification<Book> specification, Pageable pageable);
 
     @EntityGraph(attributePaths = "categories")
-    @NonNull
     Optional<Book> findById(@NonNull Long id);
 }
