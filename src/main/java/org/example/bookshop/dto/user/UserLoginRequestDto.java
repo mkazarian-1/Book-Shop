@@ -1,5 +1,6 @@
 package org.example.bookshop.dto.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class UserLoginRequestDto {
     @NotBlank
-    @Pattern(regexp = "^[^@]+@[^@]+\\.[^@]+$")
+    @Email
     private String email;
     @NotBlank
     @Size(max = 50)
