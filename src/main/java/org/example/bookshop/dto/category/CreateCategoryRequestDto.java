@@ -11,6 +11,6 @@ public class CreateCategoryRequestDto {
     @NotBlank
     @Size(max = 255)
     private String name;
-    @Size(max = 1000)
+    @Size(max = 255)
     private String description;
 }

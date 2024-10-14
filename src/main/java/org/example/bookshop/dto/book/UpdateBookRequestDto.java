@@ -29,7 +29,7 @@ public class UpdateBookRequestDto {
             message = "Invalid ISBN format"
     )
     private String isbn;
-    @Size(max = 1000)
+    @Size(max = 255)
     private String description;
     @Size(max = 255)
     private String coverImage;
