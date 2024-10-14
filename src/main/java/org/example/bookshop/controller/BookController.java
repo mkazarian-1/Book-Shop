@@ -35,11 +35,13 @@ public class BookController {
 
     @GetMapping
     @Operation(summary = "Get all books (with pagination and sorting)",
-            description = "Returns list"
-                    + " of all available books"
-                    + " by pages and give ability "
-                    + "to sort books according to the specified parameters"
-                    + "\nNecessary role: USER")
+            description = """
+                    Returns list
+                    of all available books
+                    by pages and give ability
+                    to sort books according to the specified parameters
+                    \nNecessary role: USER
+                    """)
     @PreAuthorize("hasAuthority('USER')")
     public List<BookDto> getAll(@PageableDefault(size = 5) Pageable pageable) {
         return bookService.findAll(pageable);
@@ -47,8 +49,10 @@ public class BookController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id",
-            description = "Returns the book by the specified parameter"
-                    + "\nNecessary role: USER")
+            description = """
+                    Returns the book by the specified parameter
+                    \nNecessary role: USER
+                    """)
     @PreAuthorize("hasAuthority('USER')")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.getById(id);
@@ -56,10 +60,12 @@ public class BookController {
 
     @GetMapping("/search")
     @Operation(summary = "Get all book by specification",
-            description = "Returns list of all books that "
-                    + " match the specified parameter"
-                    + " (with pagination and sorting)"
-                    + "\nNecessary role: USER")
+            description = """
+                    Returns list of all books that
+                    match the specified parameter
+                    (with pagination and sorting)
+                    \nNecessary role: USER
+                    """)
     @PreAuthorize("hasAuthority('USER')")
     public List<BookDto> getAllBySpecification(BookSearchParametersDto bookSearchParametersDto,
                                                @PageableDefault(size = 5) Pageable pageable) {
@@ -68,9 +74,12 @@ public class BookController {
 
     @PostMapping
     @Operation(summary = "Create book",
-            description = "Return the newly created book if the creation went well."
-                    + "Throws DuplicateIsbnException if the isbn already exists."
-                    + "\nNecessary role: ADMIN")
+            description = """
+                    Return the newly created book if the creation went well.
+                    Throws DuplicateIsbnException if the isbn already exists.
+                    \nNecessary role: ADMIN
+                    """)
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto)
             throws DuplicateIsbnException {
@@ -79,9 +88,11 @@ public class BookController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update book",
-            description = "Return the update book if the update went well."
-                    + "Throws DuplicateIsbnException if the isbn already exists."
-                    + "\nNecessary role: ADMIN")
+            description = """
+                    Return the update book if the update went well.
+                    Throws DuplicateIsbnException if the isbn already exists.
+                    \nNecessary role: ADMIN
+                    """)
     @PreAuthorize("hasAuthority('ADMIN')")
     public BookDto updateBook(@PathVariable Long id,
                               @RequestBody @Valid UpdateBookRequestDto bookRequestDto)
@@ -92,8 +103,10 @@ public class BookController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete book",
-            description = "Return 204 status if delete went well"
-                    + "\nNecessary role: ADMIN")
+            description = """
+                    Return 204 status if delete went well
+                    \nNecessary role: ADMIN
+                    """)
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);

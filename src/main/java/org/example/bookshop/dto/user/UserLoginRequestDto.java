@@ -11,8 +11,9 @@ import lombok.Setter;
 public class UserLoginRequestDto {
     @NotBlank
     @Email
+    @Size(max = 255)
     private String email;
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 255)
     private String password;
 }

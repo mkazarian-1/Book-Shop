@@ -58,6 +58,6 @@ public class CustomGlobalExceptionHandler {
 
         errors.put("error", e.getMessage());
 
-        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
 }

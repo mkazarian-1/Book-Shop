@@ -15,10 +15,10 @@ import lombok.Setter;
 @Setter
 public class CreateBookRequestDto {
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 255)
     private String title;
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 255)
     private String author;
     @NotNull
     @Min(value = 0)
@@ -31,6 +31,7 @@ public class CreateBookRequestDto {
     private String isbn;
     @Size(max = 1000)
     private String description;
+    @Size(max = 255)
     private String coverImage;
     @NotEmpty
     private List<Long> categoryIds;

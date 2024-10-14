@@ -31,9 +31,6 @@ public class Book {
     private Long id;
 
     @Column(nullable = false)
-    private boolean isDeleted = false;
-
-    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -58,4 +55,7 @@ public class Book {
     private String description;
 
     private String coverImage;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 }

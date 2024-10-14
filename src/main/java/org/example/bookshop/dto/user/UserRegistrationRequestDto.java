@@ -15,17 +15,17 @@ public class UserRegistrationRequestDto {
     @Email
     private String email;
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 255)
     private String password;
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 255)
     private String repeatPassword;
     @NotBlank
-    @Size(max = 30)
+    @Size(max = 255)
     private String firstName;
     @NotBlank
-    @Size(max = 30)
+    @Size(max = 255)
     private String lastName;
-    @Size(max = 200)
+    @Size(max = 255)
     private String shippingAddress;
 }

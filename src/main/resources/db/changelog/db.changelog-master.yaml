@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/changes/04-insert-roles-and-admin-table.yaml
   - include:
       file: db/changelog/changes/05-create-categories.yaml
+  - include:
+      file: db/changelog/changes/06-set-relation-category-book.yaml

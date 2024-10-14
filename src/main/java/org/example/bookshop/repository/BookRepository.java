@@ -9,9 +9,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.lang.NonNull;
 
-public interface BookRepository extends JpaRepository<Book,Long>, JpaSpecificationExecutor<Book> {
+public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
     boolean existsByIsbn(String isbn);
 
     List<Book> findAllByCategoriesId(Pageable pageable, Long categoryId);
@@ -23,5 +22,5 @@ public interface BookRepository extends JpaRepository<Book,Long>, JpaSpecificati
     Page<Book> findAll(Specification<Book> specification, Pageable pageable);
 
     @EntityGraph(attributePaths = "categories")
-    Optional<Book> findById(@NonNull Long id);
+    Optional<Book> findById(Long id);
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CreateCategoryRequestDto {
     @NotBlank
-    @Size(max = 30)
+    @Size(max = 255)
     private String name;
     @Size(max = 1000)
     private String description;

@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: your_name
+      author: mykhailo_kazarian
       changes:
         - createTable:
             tableName: roles
@@ -21,7 +21,7 @@ databaseChangeLog:
                     unique: true
   - changeSet:
       id: 4
-      author: your_name
+      author: mykhailo_kazarian
       changes:
         - createTable:
             tableName: users_roles

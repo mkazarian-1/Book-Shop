@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 5
-      author: your_name
+      author: mykhailo_kazarian
       changes:
         - insert:
             tableName: roles
@@ -23,7 +23,7 @@ databaseChangeLog:
                   value: USER
   - changeSet:
       id: 6
-      author: your_name
+      author: mykhailo_kazarian
       changes:
         - insert:
             tableName: users
@@ -49,7 +49,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 7
-      author: your_name
+      author: mykhailo_kazarian
       changes:
         - insert:
             tableName: users_roles
