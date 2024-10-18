@@ -1,0 +1,102 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1729017102877-1
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_cart_items
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: shopping_cart_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: book_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: quantity
+                  type: INT
+            tableName: cart_items
+  - changeSet:
+      id: 1729017102877-2
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_shopping_carts
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_deleted
+                  type: TINYINT(1)
+                  defaultValueBoolean: false
+            tableName: shopping_carts
+  - changeSet:
+      id: 1729017102877-3
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: user_id
+            constraintName: uc_shopping_carts_user
+            tableName: shopping_carts
+  - changeSet:
+      id: 1729017102877-4
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: cart_items
+            constraintName: FK_CART_ITEMS_ON_BOOK
+            referencedColumnNames: id
+            referencedTableName: books
+  - changeSet:
+      id: 1729017102877-5
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: shopping_cart_id
+            baseTableName: cart_items
+            constraintName: FK_CART_ITEMS_ON_SHOPPING_CART
+            referencedColumnNames: id
+            referencedTableName: shopping_carts
+  - changeSet:
+      id: 1729017102877-6
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: shopping_carts
+            constraintName: FK_SHOPPING_CARTS_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+

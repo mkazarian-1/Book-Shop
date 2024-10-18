@@ -11,6 +11,7 @@ import org.example.bookshop.model.User;
 import org.example.bookshop.repository.RoleRepository;
 import org.example.bookshop.repository.UserRepository;
 import org.example.bookshop.security.JwtUtil;
+import org.example.bookshop.service.ShoppingCartService;
 import org.example.bookshop.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ShoppingCartService shoppingCartService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
@@ -36,8 +38,11 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.toUser(requestDto);
         userMapper.setPasswordAndRole(user, requestDto, passwordEncoder, roleRepository);
+        user = userRepository.save(user);
 
-        return userMapper.toDto(userRepository.save(user));
+        shoppingCartService.createShoppingCart(user);
+
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -46,7 +51,6 @@ public class UserServiceImpl implements UserService {
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDto.getEmail(), loginRequestDto.getPassword())
         );
-
         return new UserLoginResponseDto(jwtUtil.generateToken(authentication.getName()));
     }
 }
