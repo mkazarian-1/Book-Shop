@@ -53,4 +53,13 @@ public interface BookMapper {
     }
 
     BookDtoWithoutCategoryIds toDtoWithOutCategoryIds(Book book);
+
+    @Named("bookFromId")
+    default Book bookFromId(Long bookId) {
+        Book book = new Book();
+        book.setId(bookId);
+        return book;
+    }
 }
+
+
