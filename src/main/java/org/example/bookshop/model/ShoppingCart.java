@@ -21,7 +21,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Setter
 @Table(name = "shopping_carts")
-@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE shopping_carts SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
 public class ShoppingCart {
     @Id
@@ -29,7 +29,7 @@ public class ShoppingCart {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false) // Adjusted the column name
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
