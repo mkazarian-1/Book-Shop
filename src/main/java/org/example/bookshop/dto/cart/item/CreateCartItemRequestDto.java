@@ -1,7 +1,7 @@
 package org.example.bookshop.dto.cart.item;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +10,6 @@ import lombok.Setter;
 public class CreateCartItemRequestDto {
     @NotNull
     private Long bookId;
-    @Min(value = 1)
+    @Positive
     private int quantity;
 }

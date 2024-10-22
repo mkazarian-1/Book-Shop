@@ -5,11 +5,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.bookshop.dto.cart.ShoppingCartDto;
+import org.example.bookshop.dto.cart.item.CartItemDto;
 import org.example.bookshop.dto.cart.item.CreateCartItemRequestDto;
 import org.example.bookshop.dto.cart.item.UpdateCartItemRequestDto;
-import org.example.bookshop.service.ShoppingCartManagerService;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.example.bookshop.model.User;
+import org.example.bookshop.security.UserUtil;
+import org.example.bookshop.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/cart")
 public class ShoppingCartController {
-    private final ShoppingCartManagerService shoppingCartManagerService;
+    private final ShoppingCartService shoppingCartService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('USER')")
@@ -36,46 +37,42 @@ public class ShoppingCartController {
             description = """
                     Create cart item object and Returns shopping cart date with
                     list of all available cart items
-                    Throws DuplicateException if the
-                    cart item with entered book already exists.
                     \nNecessary role: USER
                     """)
-    public ShoppingCartDto saveItem(@RequestBody @Valid CreateCartItemRequestDto cartItemRequestDto,
-                                    @PageableDefault(size = 5) Pageable pageable) {
-        return shoppingCartManagerService.saveCartItem(pageable, cartItemRequestDto);
+    public ShoppingCartDto saveItem(
+            @RequestBody @Valid CreateCartItemRequestDto cartItemRequestDto) {
+        User user = UserUtil.getCurrenSesstionUser();
+        return shoppingCartService.saveCartItem(cartItemRequestDto, user.getId());
     }
 
     @GetMapping
     @PreAuthorize("hasAuthority('USER')")
-    @Operation(summary = "Get shopping cart (with pagination and sorting for shopping cart)",
+    @Operation(summary = "Get shopping cart",
             description = """
                     Returns shopping cart date with
                     list of all available cart items
-                    by pages and give ability
-                    to sort cart items according to the specified parameters
                     \nNecessary role: USER
                     """)
-    public ShoppingCartDto getShoppingCart(@PageableDefault(size = 5) Pageable pageable) {
-        return shoppingCartManagerService.getShoppingCart(pageable);
+    public ShoppingCartDto getShoppingCart() {
+        User user = UserUtil.getCurrenSesstionUser();
+        return shoppingCartService.getShoppingCart(user.getId());
     }
 
-    @PutMapping("items/{id}")
+    @PutMapping("items/{cartItemId}")
     @PreAuthorize("hasAuthority('USER')")
     @Operation(summary = "Update shopping cart",
             description = """
                     Return the update cart item if the update went well.
-                    Throws DuplicateException
-                    if the cart item with entered book already exists.
                     \nNecessary role: USER
                     """)
-    public ShoppingCartDto updateCartItem(
+    public CartItemDto updateCartItem(
             @RequestBody @Valid UpdateCartItemRequestDto cartItemRequestDto,
-                                          @PathVariable Long id,
-                                          @PageableDefault(size = 5) Pageable pageable) {
-        return shoppingCartManagerService.updateCartItem(pageable, cartItemRequestDto, id);
+                                          @PathVariable Long cartItemId) {
+        User user = UserUtil.getCurrenSesstionUser();
+        return shoppingCartService.updateCartItem(cartItemRequestDto, cartItemId, user.getId());
     }
 
-    @DeleteMapping("items/{id}")
+    @DeleteMapping("items/{cartItemId}")
     @PreAuthorize("hasAuthority('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete shopping cart item",
@@ -83,7 +80,7 @@ public class ShoppingCartController {
                     Return 204 status if delete went well
                     \nNecessary role: USER
                     """)
-    public void deleteCartItem(@PathVariable Long id) {
-        shoppingCartManagerService.deleteCartItem(id);
+    public void deleteCartItem(@PathVariable Long cartItemId) {
+        shoppingCartService.deleteCartItem(cartItemId);
     }
 }

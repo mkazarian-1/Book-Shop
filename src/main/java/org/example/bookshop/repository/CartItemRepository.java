@@ -1,13 +1,11 @@
 package org.example.bookshop.repository;
 
-import java.util.List;
+import java.util.Optional;
 import org.example.bookshop.model.CartItem;
-import org.example.bookshop.model.ShoppingCart;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    boolean existsByBookId(Long id);
-
-    List<CartItem> findCartItemsByShoppingCart(ShoppingCart shoppingCart, Pageable pageable);
+    @EntityGraph(attributePaths = {"book","shoppingCart"})
+    Optional<CartItem> findByIdAndShoppingCartId(Long cartItemId, Long cartId);
 }
