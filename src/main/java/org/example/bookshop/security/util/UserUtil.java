@@ -1,4 +1,4 @@
-package org.example.bookshop.security;
+package org.example.bookshop.security.util;
 
 import org.example.bookshop.model.User;
 import org.springframework.security.core.context.SecurityContextHolder;

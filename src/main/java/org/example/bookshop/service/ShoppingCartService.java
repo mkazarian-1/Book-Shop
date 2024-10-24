@@ -1,7 +1,6 @@
 package org.example.bookshop.service;
 
 import org.example.bookshop.dto.cart.ShoppingCartDto;
-import org.example.bookshop.dto.cart.item.CartItemDto;
 import org.example.bookshop.dto.cart.item.CreateCartItemRequestDto;
 import org.example.bookshop.dto.cart.item.UpdateCartItemRequestDto;
 import org.example.bookshop.model.User;
@@ -13,7 +12,7 @@ public interface ShoppingCartService {
 
     ShoppingCartDto getShoppingCart(Long userId);
 
-    CartItemDto updateCartItem(
+    ShoppingCartDto updateCartItem(
             UpdateCartItemRequestDto updateCartItemRequestDto,
             Long cartItemId,
             Long userId

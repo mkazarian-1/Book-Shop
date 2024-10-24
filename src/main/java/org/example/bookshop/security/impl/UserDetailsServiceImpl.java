@@ -1,4 +1,4 @@
-package org.example.bookshop.security;
+package org.example.bookshop.security.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

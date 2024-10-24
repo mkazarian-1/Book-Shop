@@ -3,7 +3,6 @@ package org.example.bookshop.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.bookshop.dto.cart.ShoppingCartDto;
-import org.example.bookshop.dto.cart.item.CartItemDto;
 import org.example.bookshop.dto.cart.item.CreateCartItemRequestDto;
 import org.example.bookshop.dto.cart.item.UpdateCartItemRequestDto;
 import org.example.bookshop.mapper.CartItemMapper;
@@ -38,7 +37,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartDto saveCartItem(
             CreateCartItemRequestDto cartItemRequestDto,
             Long userId) {
-
         Book book = bookRepository.findById(cartItemRequestDto.getBookId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Book with id: %d is not found",
@@ -60,8 +58,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                                 cartItemRequestDto, cart, book));
 
         shoppingCartRepository.save(cart);
-
-        return shoppingCartMapper.toDto(cart);
+        return getShoppingCart(userId);
     }
 
     @Override
@@ -74,9 +71,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public CartItemDto updateCartItem(
+    public ShoppingCartDto updateCartItem(
             UpdateCartItemRequestDto updateCartItemRequestDto, Long cartItemId, Long userId) {
-
         ShoppingCart cart = shoppingCartRepository.findByUserId(userId).orElseThrow(
                 () -> new EntityNotFoundException(String.format(
                         "Can't find Shopping cart with user id: %d", userId)));
@@ -90,7 +86,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 ));
 
         cartItemRepository.save(cartItem);
-        return cartItemMapper.toDto(cartItem);
+        return getShoppingCart(userId);
     }
 
     @Override
@@ -103,7 +99,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         CartItem cartItem = cartItemMapper.toEntity(itemRequestDto);
         cartItem.setBook(book);
         cartItem.setShoppingCart(cart);
-        cartItemRepository.save(cartItem);
         cart.getCartItems().add(cartItem);
     }
 }

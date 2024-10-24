@@ -9,7 +9,7 @@ import org.example.bookshop.dto.user.UserLoginResponseDto;
 import org.example.bookshop.dto.user.UserRegistrationRequestDto;
 import org.example.bookshop.dto.user.UserResponseDto;
 import org.example.bookshop.exception.RegistrationException;
-import org.example.bookshop.service.UserService;
+import org.example.bookshop.security.UserAuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthenticationController {
-    private final UserService userService;
+    private final UserAuthenticationService userAuthenticationService;
 
     @Operation(summary = "Register a new user",
             description = """
@@ -36,7 +36,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {
-        return userService.register(request);
+        return userAuthenticationService.register(request);
     }
 
     @Operation(summary = "User authorization",
@@ -48,6 +48,6 @@ public class AuthenticationController {
                     """)
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto loginRequestDto) {
-        return userService.login(loginRequestDto);
+        return userAuthenticationService.login(loginRequestDto);
     }
 }

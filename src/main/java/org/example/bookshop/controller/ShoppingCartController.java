@@ -5,11 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.bookshop.dto.cart.ShoppingCartDto;
-import org.example.bookshop.dto.cart.item.CartItemDto;
 import org.example.bookshop.dto.cart.item.CreateCartItemRequestDto;
 import org.example.bookshop.dto.cart.item.UpdateCartItemRequestDto;
 import org.example.bookshop.model.User;
-import org.example.bookshop.security.UserUtil;
+import org.example.bookshop.security.util.UserUtil;
 import org.example.bookshop.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -65,7 +64,7 @@ public class ShoppingCartController {
                     Return the update cart item if the update went well.
                     \nNecessary role: USER
                     """)
-    public CartItemDto updateCartItem(
+    public ShoppingCartDto updateCartItem(
             @RequestBody @Valid UpdateCartItemRequestDto cartItemRequestDto,
                                           @PathVariable Long cartItemId) {
         User user = UserUtil.getCurrenSesstionUser();
