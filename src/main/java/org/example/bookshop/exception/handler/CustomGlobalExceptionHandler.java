@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.example.bookshop.exception.DuplicateIsbnException;
+import org.example.bookshop.exception.DuplicateException;
 import org.example.bookshop.exception.RegistrationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,9 +41,9 @@ public class CustomGlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(DuplicateIsbnException.class)
-    public ResponseEntity<Map<String, String>> handleDuplicateIsbnException(
-            DuplicateIsbnException e) {
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicateException(
+            DuplicateException e) {
         Map<String, String> errors = new HashMap<>();
 
         errors.put("error", e.getMessage());

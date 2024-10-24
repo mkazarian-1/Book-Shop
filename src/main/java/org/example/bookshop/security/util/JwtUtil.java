@@ -1,4 +1,4 @@
-package org.example.bookshop.security;
+package org.example.bookshop.security.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
