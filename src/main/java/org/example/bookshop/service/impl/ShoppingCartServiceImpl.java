@@ -43,9 +43,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                                 cartItemRequestDto.getBookId())
                 ));
 
-        ShoppingCart cart = shoppingCartRepository.findByUserId(userId).orElseThrow(
-                () -> new EntityNotFoundException(String.format(
-                        "Can't find Shopping cart with user id: %d", userId)));
+        ShoppingCart cart = getCart(userId);
 
         cart.getCartItems().stream()
                 .filter(item -> item.getBook()
@@ -63,19 +61,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto getShoppingCart(Long userId) {
-        return shoppingCartMapper.toDto(
-                shoppingCartRepository.findByUserId(userId)
-                        .orElseThrow(() -> new EntityNotFoundException(String.format(
-                                "Can't find Shopping cart with user id: %d", userId)))
-        );
+        return shoppingCartMapper.toDto(getCart(userId));
     }
 
     @Override
     public ShoppingCartDto updateCartItem(
             UpdateCartItemRequestDto updateCartItemRequestDto, Long cartItemId, Long userId) {
-        ShoppingCart cart = shoppingCartRepository.findByUserId(userId).orElseThrow(
-                () -> new EntityNotFoundException(String.format(
-                        "Can't find Shopping cart with user id: %d", userId)));
+        ShoppingCart cart = getCart(userId);
 
         CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(cartItemId, cart.getId())
                 .map(item -> {
@@ -100,5 +92,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItem.setBook(book);
         cartItem.setShoppingCart(cart);
         cart.getCartItems().add(cartItem);
+    }
+
+    private ShoppingCart getCart(Long userId) {
+        return shoppingCartRepository.findByUserId(userId).orElseThrow(
+                () -> new EntityNotFoundException(String.format(
+                        "Can't find Shopping cart with user id: %d", userId)));
     }
 }

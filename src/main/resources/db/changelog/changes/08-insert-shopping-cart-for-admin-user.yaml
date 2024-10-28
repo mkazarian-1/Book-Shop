@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: your_name
+      author: mkUser
       changes:
         - insert:
             tableName: shopping_carts
