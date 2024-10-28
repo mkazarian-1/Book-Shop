@@ -9,7 +9,7 @@ import org.example.bookshop.dto.book.BookDto;
 import org.example.bookshop.dto.book.BookSearchParametersDto;
 import org.example.bookshop.dto.book.CreateBookRequestDto;
 import org.example.bookshop.dto.book.UpdateBookRequestDto;
-import org.example.bookshop.exception.DuplicateIsbnException;
+import org.example.bookshop.exception.DuplicateException;
 import org.example.bookshop.service.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -82,7 +82,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookRequestDto)
-            throws DuplicateIsbnException {
+            throws DuplicateException {
         return bookService.save(bookRequestDto);
     }
 
@@ -90,13 +90,13 @@ public class BookController {
     @Operation(summary = "Update book",
             description = """
                     Return the update book if the update went well.
-                    Throws DuplicateIsbnException if the isbn already exists.
+                    Throws DuplicateException if the isbn already exists.
                     \nNecessary role: ADMIN
                     """)
     @PreAuthorize("hasAuthority('ADMIN')")
     public BookDto updateBook(@PathVariable Long id,
                               @RequestBody @Valid UpdateBookRequestDto bookRequestDto)
-            throws DuplicateIsbnException {
+            throws DuplicateException {
         return bookService.update(bookRequestDto, id);
     }
 
