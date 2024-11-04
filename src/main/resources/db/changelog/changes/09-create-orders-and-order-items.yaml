@@ -1,0 +1,124 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1730276469521-1
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_order_items
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: order_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: book_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: quantity
+                  type: INT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: price
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_deleted
+                  type: TINYINT(1)
+                  defaultValueBoolean: false
+            tableName: order_items
+  - changeSet:
+      id: 1730276469521-2
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_orders
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: total
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: order_date
+                  type: DATETIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: shipping_address
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_deleted
+                  type: TINYINT(1)
+                  defaultValueBoolean: false
+            tableName: orders
+  - changeSet:
+      id: 1730276469521-3
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: orders
+            constraintName: FK_ORDERS_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1730276469521-4
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: order_items
+            constraintName: FK_ORDER_ITEMS_ON_BOOK
+            referencedColumnNames: id
+            referencedTableName: books
+  - changeSet:
+      id: 1730276469521-5
+      author: mkUser
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: order_items
+            constraintName: FK_ORDER_ITEMS_ON_ORDER
+            referencedColumnNames: id
+            referencedTableName: orders
+

@@ -80,6 +80,7 @@ public class ShoppingCartController {
                     \nNecessary role: USER
                     """)
     public void deleteCartItem(@PathVariable Long cartItemId) {
-        shoppingCartService.deleteCartItem(cartItemId);
+        User user = UserUtil.getCurrenSesstionUser();
+        shoppingCartService.deleteCartItem(cartItemId, user.getId());
     }
 }

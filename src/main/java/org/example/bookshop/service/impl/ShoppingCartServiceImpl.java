@@ -82,8 +82,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteCartItem(Long id) {
-        cartItemRepository.deleteById(id);
+    public void deleteCartItem(Long cartItemId, Long userId) {
+        int deletedCount = cartItemRepository.deleteByIdAndShoppingCartUserId(cartItemId, userId);
+
+        if (deletedCount == 0) {
+            throw new EntityNotFoundException(
+                    String.format("No cart item with id: %d found for user: %d",
+                            cartItemId, userId));
+        }
     }
 
     private void addCartItemToCart(CreateCartItemRequestDto itemRequestDto,

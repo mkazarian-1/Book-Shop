@@ -60,4 +60,14 @@ public class CustomGlobalExceptionHandler {
 
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(
+            IllegalArgumentException e) {
+        Map<String, String> errors = new HashMap<>();
+
+        errors.put("error", e.getMessage());
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 }
