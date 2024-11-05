@@ -6,12 +6,13 @@ import org.example.bookshop.dto.order.OrderDto;
 import org.example.bookshop.dto.order.OrderItemDto;
 import org.example.bookshop.dto.order.UpdateOrderRequestDto;
 import org.example.bookshop.model.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
     OrderDto createOrder(CreateOrderRequestDto orderRequestDto, User user);
 
-    List<OrderDto> getOrderHistory(Pageable pageable, Long userId);
+    Page<OrderDto> getOrderHistory(Pageable pageable, Long userId);
 
     List<OrderItemDto> getOrderItems(Long orderId, Long userId);
 
@@ -19,5 +20,5 @@ public interface OrderService {
 
     OrderDto updateOrder(Long id, UpdateOrderRequestDto orderRequestDto);
 
-    List<OrderDto> getAllOrders(Pageable pageable);
+    Page<OrderDto> getAllOrders(Pageable pageable);
 }

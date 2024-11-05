@@ -16,6 +16,7 @@ import org.example.bookshop.repository.CartItemRepository;
 import org.example.bookshop.repository.ShoppingCartRepository;
 import org.example.bookshop.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final BookRepository bookRepository;
 
+    @Transactional
     @Override
     public void createShoppingCart(User user) {
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -33,6 +35,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartRepository.save(shoppingCart);
     }
 
+    @Transactional
     @Override
     public ShoppingCartDto saveCartItem(
             CreateCartItemRequestDto cartItemRequestDto,
@@ -43,17 +46,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                                 cartItemRequestDto.getBookId())
                 ));
 
-        ShoppingCart cart = getCart(userId);
-
-        cart.getCartItems().stream()
-                .filter(item -> item.getBook()
-                        .getId()
-                        .equals(cartItemRequestDto.getBookId()))
-                .findFirst()
-                .ifPresentOrElse(item -> item.setQuantity(item.getQuantity()
-                                + cartItemRequestDto.getQuantity()),
-                        () -> addCartItemToCart(
-                                cartItemRequestDto, cart, book));
+        ShoppingCart cart = buildCart(userId,cartItemRequestDto,book);
 
         shoppingCartRepository.save(cart);
         return getShoppingCart(userId);
@@ -64,6 +57,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.toDto(getCart(userId));
     }
 
+    @Transactional
     @Override
     public ShoppingCartDto updateCartItem(
             UpdateCartItemRequestDto updateCartItemRequestDto, Long cartItemId, Long userId) {
@@ -81,6 +75,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return getShoppingCart(userId);
     }
 
+    @Transactional
     @Override
     public void deleteCartItem(Long cartItemId, Long userId) {
         int deletedCount = cartItemRepository.deleteByIdAndShoppingCartUserId(cartItemId, userId);
@@ -98,6 +93,24 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItem.setBook(book);
         cartItem.setShoppingCart(cart);
         cart.getCartItems().add(cartItem);
+    }
+
+    private ShoppingCart buildCart(Long userId,
+                                   CreateCartItemRequestDto cartItemRequestDto,
+                                   Book book) {
+        ShoppingCart cart = getCart(userId);
+
+        cart.getCartItems().stream()
+                .filter(item -> item.getBook()
+                        .getId()
+                        .equals(cartItemRequestDto.getBookId()))
+                .findFirst()
+                .ifPresentOrElse(item -> item.setQuantity(item.getQuantity()
+                                + cartItemRequestDto.getQuantity()),
+                        () -> addCartItemToCart(
+                                cartItemRequestDto, cart, book));
+
+        return cart;
     }
 
     private ShoppingCart getCart(Long userId) {

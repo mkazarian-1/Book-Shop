@@ -39,13 +39,13 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private Status status = Status.NEW;
 
     @Column(nullable = false)
     private BigDecimal total;
 
     @Column(nullable = false)
-    private LocalDateTime orderDate;
+    private LocalDateTime orderDate = LocalDateTime.now();
 
     @Column(nullable = false)
     private String shippingAddress;

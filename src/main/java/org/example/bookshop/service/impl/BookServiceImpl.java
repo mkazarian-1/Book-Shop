@@ -17,6 +17,7 @@ import org.example.bookshop.repository.specification.SpecificationBuilder;
 import org.example.bookshop.service.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final SpecificationBuilder<Book> specificationBuilder;
 
+    @Transactional
     @Override
     public BookDto save(CreateBookRequestDto bookRequestDto) {
         if (bookRepository.existsByIsbn(bookRequestDto.getIsbn())) {
@@ -77,6 +79,7 @@ public class BookServiceImpl implements BookService {
                                         "Can't find book by id:" + id)));
     }
 
+    @Transactional
     @Override
     public BookDto update(UpdateBookRequestDto requestDto, Long id) {
         Book book = bookRepository.findById(id)
@@ -95,6 +98,7 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toDto(bookRepository.save(book));
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         bookRepository.deleteById(id);

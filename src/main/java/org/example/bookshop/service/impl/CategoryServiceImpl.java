@@ -12,6 +12,7 @@ import org.example.bookshop.repository.CategoryRepository;
 import org.example.bookshop.service.CategoryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +36,14 @@ public class CategoryServiceImpl implements CategoryService {
                         "There is no category with the specified ID:" + id)));
     }
 
+    @Transactional
     @Override
     public CategoryDto save(CreateCategoryRequestDto requestDto) {
         Category category = categoryMapper.toEntity(requestDto);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
+    @Transactional
     @Override
     public CategoryDto update(Long id, UpdateCategoryRequestDto requestDto) {
         Category category = categoryRepository.findById(id).orElseThrow(
@@ -50,6 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);

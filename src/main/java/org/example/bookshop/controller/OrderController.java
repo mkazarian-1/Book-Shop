@@ -12,6 +12,7 @@ import org.example.bookshop.dto.order.UpdateOrderRequestDto;
 import org.example.bookshop.model.User;
 import org.example.bookshop.security.util.UserUtil;
 import org.example.bookshop.service.OrderService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +40,7 @@ public class OrderController {
     @PostMapping
     @PreAuthorize("hasAuthority('USER')")
     public OrderDto createOrder(@RequestBody @Valid CreateOrderRequestDto orderRequestDto) {
-        User user = UserUtil.getCurrenSesstionUser();
+        User user = UserUtil.getAuthenticatedUser();
         return orderService.createOrder(orderRequestDto, user);
     }
 
@@ -50,8 +51,8 @@ public class OrderController {
                     """)
     @GetMapping
     @PreAuthorize("hasAuthority('USER')")
-    public List<OrderDto> getOrderHistory(@PageableDefault(size = 5) Pageable pageable) {
-        User user = UserUtil.getCurrenSesstionUser();
+    public Page<OrderDto> getOrderHistory(@PageableDefault(size = 5) Pageable pageable) {
+        User user = UserUtil.getAuthenticatedUser();
         return orderService.getOrderHistory(pageable, user.getId());
     }
 
@@ -64,7 +65,7 @@ public class OrderController {
     @GetMapping("/{orderId}/items")
     @PreAuthorize("hasAuthority('USER')")
     public List<OrderItemDto> getOrderItems(@PathVariable Long orderId) {
-        User user = UserUtil.getCurrenSesstionUser();
+        User user = UserUtil.getAuthenticatedUser();
         return orderService.getOrderItems(orderId, user.getId());
     }
 
@@ -78,7 +79,7 @@ public class OrderController {
     @PreAuthorize("hasAuthority('USER')")
     public OrderItemDto getOderItem(@PathVariable Long orderId,
                                     @PathVariable Long itemId) {
-        User user = UserUtil.getCurrenSesstionUser();
+        User user = UserUtil.getAuthenticatedUser();
         return orderService.getOderItem(orderId, itemId, user.getId());
     }
 
@@ -98,7 +99,7 @@ public class OrderController {
                     """)
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<OrderDto> getAllOrders(@PageableDefault(size = 5) Pageable pageable) {
+    public Page<OrderDto> getAllOrders(@PageableDefault(size = 5) Pageable pageable) {
         return orderService.getAllOrders(pageable);
     }
 }
