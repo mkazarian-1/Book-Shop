@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.example.bookshop.exception.DuplicateException;
+import org.example.bookshop.exception.OrderProcessingException;
 import org.example.bookshop.exception.RegistrationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,4 +71,15 @@ public class CustomGlobalExceptionHandler {
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(OrderProcessingException.class)
+    public ResponseEntity<Map<String, String>> handleOrderProcessingException(
+            OrderProcessingException e) {
+        Map<String, String> errors = new HashMap<>();
+
+        errors.put("error", e.getMessage());
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
 }

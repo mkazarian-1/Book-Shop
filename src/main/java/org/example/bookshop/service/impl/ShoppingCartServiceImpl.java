@@ -27,7 +27,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final BookRepository bookRepository;
 
-    @Transactional
     @Override
     public void createShoppingCart(User user) {
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -75,7 +74,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return getShoppingCart(userId);
     }
 
-    @Transactional
     @Override
     public void deleteCartItem(Long cartItemId, Long userId) {
         int deletedCount = cartItemRepository.deleteByIdAndShoppingCartUserId(cartItemId, userId);

@@ -9,6 +9,7 @@ import org.example.bookshop.dto.order.CreateOrderRequestDto;
 import org.example.bookshop.dto.order.OrderDto;
 import org.example.bookshop.dto.order.OrderItemDto;
 import org.example.bookshop.dto.order.UpdateOrderRequestDto;
+import org.example.bookshop.exception.OrderProcessingException;
 import org.example.bookshop.mapper.OrderItemMapper;
 import org.example.bookshop.mapper.OrderMapper;
 import org.example.bookshop.model.CartItem;
@@ -44,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
         Set<CartItem> cartItems = shoppingCart.getCartItems();
 
         if (cartItems.isEmpty()) {
-            throw new EntityNotFoundException("Can't create order by empty cart. UserId:"
+            throw new OrderProcessingException("Can't create order by empty cart. UserId:"
                     + user.getId());
         }
 
