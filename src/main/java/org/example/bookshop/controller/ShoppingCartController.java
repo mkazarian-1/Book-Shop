@@ -40,7 +40,7 @@ public class ShoppingCartController {
                     """)
     public ShoppingCartDto saveItem(
             @RequestBody @Valid CreateCartItemRequestDto cartItemRequestDto) {
-        User user = UserUtil.getCurrenSesstionUser();
+        User user = UserUtil.getAuthenticatedUser();
         return shoppingCartService.saveCartItem(cartItemRequestDto, user.getId());
     }
 
@@ -53,7 +53,7 @@ public class ShoppingCartController {
                     \nNecessary role: USER
                     """)
     public ShoppingCartDto getShoppingCart() {
-        User user = UserUtil.getCurrenSesstionUser();
+        User user = UserUtil.getAuthenticatedUser();
         return shoppingCartService.getShoppingCart(user.getId());
     }
 
@@ -67,7 +67,7 @@ public class ShoppingCartController {
     public ShoppingCartDto updateCartItem(
             @RequestBody @Valid UpdateCartItemRequestDto cartItemRequestDto,
                                           @PathVariable Long cartItemId) {
-        User user = UserUtil.getCurrenSesstionUser();
+        User user = UserUtil.getAuthenticatedUser();
         return shoppingCartService.updateCartItem(cartItemRequestDto, cartItemId, user.getId());
     }
 
@@ -80,6 +80,7 @@ public class ShoppingCartController {
                     \nNecessary role: USER
                     """)
     public void deleteCartItem(@PathVariable Long cartItemId) {
-        shoppingCartService.deleteCartItem(cartItemId);
+        User user = UserUtil.getAuthenticatedUser();
+        shoppingCartService.deleteCartItem(cartItemId, user.getId());
     }
 }

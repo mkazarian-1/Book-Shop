@@ -15,3 +15,5 @@ databaseChangeLog:
       file: db/changelog/changes/07-set-shopping-carts-and-cart-items.yaml
   - include:
       file: db/changelog/changes/08-insert-shopping-cart-for-admin-user.yaml
+  - include:
+      file: db/changelog/changes/09-create-orders-and-order-items.yaml
