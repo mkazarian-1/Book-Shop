@@ -5,7 +5,3 @@ insert into books (is_deleted, title, isbn, price, author) values (false,'Some T
 insert into books (is_deleted, title, isbn, price, author) values (false,'Some Title2','12346', 120, 'Jhon kik 2');
 insert into books (is_deleted, title, isbn, price, author) values (false,'Title3','12347', 130, 'Jhon kik 3');
 insert into books (is_deleted, title, isbn, price, author) values (false,'Title4','12348', 140, 'Jhon kik 4');
-
-insert into books_categories (book_id, categories_id) values (1,1);
-insert into books_categories (book_id, categories_id) values (1,2);
-insert into books_categories (book_id, categories_id) values (2,1);
