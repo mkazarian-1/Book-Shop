@@ -1,6 +1,7 @@
 package org.example.bookshop.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.example.bookshop.util.TestDataUtils.createBookDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -21,7 +22,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.example.bookshop.dto.book.BookDto;
 import org.example.bookshop.dto.book.CreateBookRequestDto;
 import org.example.bookshop.dto.book.UpdateBookRequestDto;
-import org.junit.jupiter.api.AfterEach;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -60,12 +61,6 @@ class BookControllerTest {
                 "books/delete-books-with-category.sql");
     }
 
-    @AfterEach
-    public void afterEach(@Autowired DataSource dataSource) {
-        sqlCommandExecutor(dataSource,
-                "books/delete-books-with-category.sql");
-    }
-
     @SneakyThrows
     static void sqlCommandExecutor(DataSource dataSource, String path) {
         try (Connection connection = dataSource.getConnection()) {
@@ -79,6 +74,8 @@ class BookControllerTest {
     @Test
     @Sql(scripts = "classpath:books/add-books-with-category-except-id.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:books/delete-books-with-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     @DisplayName("""
             Should create and save Book in DB
@@ -98,16 +95,16 @@ class BookControllerTest {
                 """);
         createBookDto.setCategoryIds(List.of(1L, 2L));
 
-        BookDto expected = new BookDto();
-        expected.setTitle("Jhon Snow1");
-        expected.setAuthor("Author1");
-        expected.setIsbn("978-2388981567");
-        expected.setPrice(new BigDecimal(5));
-        expected.setDescription("""
-                sed do eiusmod tempor incididunt
-                ut labore et dolore magna aliqua.
-                """);
-        expected.setCategoryIds(List.of(1L, 2L));
+        BookDto expected = createBookDto(1L,
+                "Jhon Snow1",
+                "Author1",
+                "978-2388981567",
+                new BigDecimal(5),
+                """
+                        sed do eiusmod tempor incididunt
+                        ut labore et dolore magna aliqua.
+                        """,
+                List.of(1L, 2L));
 
         String jsonRequest = objectMapper.writeValueAsString(createBookDto);
 
@@ -137,6 +134,8 @@ class BookControllerTest {
     @Test
     @Sql(scripts = "classpath:books/add-books-with-category.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:books/delete-books-with-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     @DisplayName("""
             Should update Book in DB and return BookDto
@@ -211,6 +210,8 @@ class BookControllerTest {
     @Test
     @Sql(scripts = "classpath:books/add-books-with-category.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:books/delete-books-with-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     @DisplayName("""
             Should delete Book in DB and return code 204
@@ -240,45 +241,15 @@ class BookControllerTest {
     @Test
     @Sql(scripts = "classpath:books/add-books-with-category.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:books/delete-books-with-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", authorities = {"USER"})
     @DisplayName("""
             Should return all books in DB
             """)
     public void getAll_WithDefaultPage_Success() throws Exception {
         //Given
-        BookDto bookDto1 = new BookDto();
-        bookDto1.setTitle("Some Title1");
-        bookDto1.setAuthor("Jhon kik 1");
-        bookDto1.setIsbn("12345");
-        bookDto1.setPrice(new BigDecimal(100));
-        bookDto1.setCategoryIds(List.of(1L, 2L));
-
-        List<BookDto> expected = new ArrayList<>();
-        expected.add(bookDto1);
-
-        BookDto bookDto2 = new BookDto();
-        bookDto2.setTitle("Some Title2");
-        bookDto2.setAuthor("Jhon kik 2");
-        bookDto2.setIsbn("12346");
-        bookDto2.setPrice(new BigDecimal(120));
-        bookDto2.setCategoryIds(List.of(1L));
-        expected.add(bookDto2);
-
-        BookDto bookDto3 = new BookDto();
-        bookDto3.setTitle("Title3");
-        bookDto3.setAuthor("Jhon kik 3");
-        bookDto3.setIsbn("12347");
-        bookDto3.setPrice(new BigDecimal(130));
-        bookDto3.setCategoryIds(List.of());
-        expected.add(bookDto3);
-
-        BookDto bookDto4 = new BookDto();
-        bookDto4.setTitle("Title4");
-        bookDto4.setAuthor("Jhon kik 4");
-        bookDto4.setIsbn("12348");
-        bookDto4.setPrice(new BigDecimal(140));
-        bookDto4.setCategoryIds(List.of());
-        expected.add(bookDto4);
+        List<BookDto> expected = getBookDtoList();
 
         //When
         MvcResult mvcResult = mockMvc
@@ -313,6 +284,8 @@ class BookControllerTest {
     @Test
     @Sql(scripts = "classpath:books/add-books-with-category.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:books/delete-books-with-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", authorities = {"USER"})
     @DisplayName("""
             Should find book with entered id
@@ -320,13 +293,12 @@ class BookControllerTest {
     public void getById_WitheExistedBook_Success()
             throws Exception {
         //Given
-        BookDto expected = new BookDto();
-        expected.setId(2L);
-        expected.setTitle("Some Title2");
-        expected.setAuthor("Jhon kik 2");
-        expected.setIsbn("12346");
-        expected.setPrice(new BigDecimal(120));
-        expected.setCategoryIds(List.of(1L));
+        BookDto expected = createBookDto(2L,
+                "Some Title2",
+                "Jhon kik 2",
+                "12346",
+                new BigDecimal(120),
+                List.of(1L));
 
         //When
         MvcResult mvcResult = mockMvc
@@ -355,6 +327,8 @@ class BookControllerTest {
     @Test
     @Sql(scripts = "classpath:books/add-books-with-category.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:books/delete-books-with-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", authorities = {"USER"})
     @DisplayName("""
             Should find book with entered specification
@@ -381,6 +355,8 @@ class BookControllerTest {
     @Test
     @Sql(scripts = "classpath:books/add-books-with-category.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:books/delete-books-with-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", authorities = {"USER"})
     @DisplayName("""
             Should return empty array because book with current
@@ -409,6 +385,8 @@ class BookControllerTest {
     @Test
     @Sql(scripts = "classpath:books/add-books-with-category.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:books/delete-books-with-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @WithMockUser(username = "admin", authorities = {"USER"})
     @DisplayName("""
             Should return all books because current param doesn't exist
@@ -431,5 +409,34 @@ class BookControllerTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, BookDto.class)
         );
         Assertions.assertEquals(4, actual.size());
+    }
+
+    private static @NotNull List<BookDto> getBookDtoList() {
+        List<BookDto> expected = new ArrayList<>();
+        expected.add(createBookDto(1L,
+                "Some Title1",
+                "Jhon kik 1",
+                "12345",
+                new BigDecimal(100),
+                List.of(1L, 2L)));
+        expected.add(createBookDto(1L,
+                "Some Title2",
+                "Jhon kik 2",
+                "12346",
+                new BigDecimal(120),
+                List.of(1L)));
+        expected.add(createBookDto(1L,
+                "Title3",
+                "Jhon kik 3",
+                "12347",
+                new BigDecimal(130),
+                List.of()));
+        expected.add(createBookDto(1L,
+                "Title4",
+                "Jhon kik 4",
+                "12348",
+                new BigDecimal(140),
+                List.of()));
+        return expected;
     }
 }
