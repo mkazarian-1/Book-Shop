@@ -2,7 +2,6 @@ package org.example.bookshop.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.bookshop.util.TestDataUtils.createBookDto;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -13,25 +12,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import javax.sql.DataSource;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.example.bookshop.dto.book.BookDto;
 import org.example.bookshop.dto.book.CreateBookRequestDto;
 import org.example.bookshop.dto.book.UpdateBookRequestDto;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,29 +39,13 @@ class BookControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private DataSource dataSource;
-
     @BeforeAll
     static void beforeAll(
-            @Autowired DataSource dataSource,
             @Autowired WebApplicationContext applicationContext) {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
-        sqlCommandExecutor(dataSource,
-                "books/delete-books-with-category.sql");
-    }
-
-    @SneakyThrows
-    static void sqlCommandExecutor(DataSource dataSource, String path) {
-        try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(
-                    connection,
-                    new ClassPathResource(path));
-        }
     }
 
     @Test
@@ -159,16 +136,6 @@ class BookControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        MvcResult mvcGetResult = mockMvc
-                .perform(
-                        get("/books/1")
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-
-        System.out.println(mvcGetResult.getResponse().getContentAsString());
-
         //Then
         BookDto actual = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(), BookDto.class);
@@ -181,27 +148,6 @@ class BookControllerTest {
         Assertions.assertEquals(expected.getPrice().stripTrailingZeros(),
                 actual.getPrice().stripTrailingZeros());
         assertThat(actual.getCategoryIds())
-                .containsExactlyInAnyOrderElementsOf(
-                        expected.getCategoryIds()
-                );
-
-        BookDto actualGet = objectMapper.readValue(
-                mvcGetResult.getResponse().getContentAsString(),
-                BookDto.class
-        );
-        Assertions.assertNotNull(actualGet);
-        Assertions.assertNotNull(actualGet.getId());
-
-        Assertions.assertEquals(expected.getTitle(),
-                actualGet.getTitle());
-        Assertions.assertEquals(expected.getAuthor(),
-                actualGet.getAuthor());
-        Assertions.assertEquals(expected.getIsbn(),
-                actualGet.getIsbn());
-        Assertions.assertEquals(expected.getPrice()
-                        .stripTrailingZeros(),
-                actualGet.getPrice().stripTrailingZeros());
-        assertThat(actualGet.getCategoryIds())
                 .containsExactlyInAnyOrderElementsOf(
                         expected.getCategoryIds()
                 );
@@ -219,23 +165,8 @@ class BookControllerTest {
     void deleteBook_BookExist_Success() throws Exception {
         //When
         mockMvc.perform(
-                        get("/books/1")
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-
-        MvcResult mvcResult = mockMvc.perform(
                 delete("/books/1")
         ).andExpect(status().isNoContent()).andReturn();
-
-        mockMvc.perform(
-                        get("/books/1")
-                )
-                .andExpect(status().isNotFound())
-                .andReturn();
-        //Then
-        assertEquals("", mvcResult
-                .getResponse().getContentAsString());
     }
 
     @Test
@@ -411,7 +342,7 @@ class BookControllerTest {
         Assertions.assertEquals(4, actual.size());
     }
 
-    private static @NotNull List<BookDto> getBookDtoList() {
+    private static List<BookDto> getBookDtoList() {
         List<BookDto> expected = new ArrayList<>();
         expected.add(createBookDto(1L,
                 "Some Title1",

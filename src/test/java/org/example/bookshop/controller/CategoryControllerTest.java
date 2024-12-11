@@ -10,11 +10,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import javax.sql.DataSource;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.example.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import org.example.bookshop.dto.category.CategoryDto;
@@ -26,9 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,28 +38,13 @@ class CategoryControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private DataSource dataSource;
-
     @BeforeAll
     static void beforeAll(
-            @Autowired DataSource dataSource,
             @Autowired WebApplicationContext applicationContext) {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
-        sqlCommandExecutor(dataSource, "books/delete-books-with-category.sql");
-    }
-
-    @SneakyThrows
-    static void sqlCommandExecutor(DataSource dataSource, String path) {
-        try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(
-                    connection,
-                    new ClassPathResource(path));
-        }
     }
 
     @Test
@@ -278,7 +258,6 @@ class CategoryControllerTest {
         expected.add(createCategoryDto(2L, "lol info2", "some description2"));
         expected.add(createCategoryDto(3L, "lol info3", "some description3"));
         expected.add(createCategoryDto(4L, "lol info4", "some description4"));
-
         return expected;
     }
 }
