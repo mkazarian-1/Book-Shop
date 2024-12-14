@@ -18,6 +18,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.example.bookshop.dto.book.BookDto;
 import org.example.bookshop.dto.book.CreateBookRequestDto;
 import org.example.bookshop.dto.book.UpdateBookRequestDto;
+import org.example.bookshop.util.TestDataUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -180,7 +181,7 @@ class BookControllerTest {
             """)
     public void getAll_WithDefaultPage_Success() throws Exception {
         //Given
-        List<BookDto> expected = getBookDtoList();
+        List<BookDto> expected = TestDataUtils.getBookDtoList();
 
         //When
         MvcResult mvcResult = mockMvc
@@ -340,34 +341,5 @@ class BookControllerTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, BookDto.class)
         );
         Assertions.assertEquals(4, actual.size());
-    }
-
-    private static List<BookDto> getBookDtoList() {
-        List<BookDto> expected = new ArrayList<>();
-        expected.add(createBookDto(1L,
-                "Some Title1",
-                "Jhon kik 1",
-                "12345",
-                new BigDecimal(100),
-                List.of(1L, 2L)));
-        expected.add(createBookDto(1L,
-                "Some Title2",
-                "Jhon kik 2",
-                "12346",
-                new BigDecimal(120),
-                List.of(1L)));
-        expected.add(createBookDto(1L,
-                "Title3",
-                "Jhon kik 3",
-                "12347",
-                new BigDecimal(130),
-                List.of()));
-        expected.add(createBookDto(1L,
-                "Title4",
-                "Jhon kik 4",
-                "12348",
-                new BigDecimal(140),
-                List.of()));
-        return expected;
     }
 }

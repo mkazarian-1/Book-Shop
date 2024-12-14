@@ -17,6 +17,7 @@ import org.example.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import org.example.bookshop.dto.category.CategoryDto;
 import org.example.bookshop.dto.category.CreateCategoryRequestDto;
 import org.example.bookshop.dto.category.UpdateCategoryRequestDto;
+import org.example.bookshop.util.TestDataUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -58,7 +59,7 @@ class CategoryControllerTest {
             """)
     void getAll_WithDefaultPage_Success() throws Exception {
         //Given
-        List<CategoryDto> expected = getDtoList();
+        List<CategoryDto> expected = TestDataUtils.getDtoList();
 
         //When
         MvcResult mvcResult = mockMvc
@@ -250,14 +251,5 @@ class CategoryControllerTest {
         mockMvc.perform(
                 delete("/categories/1")
         ).andExpect(status().isNoContent()).andReturn();
-    }
-
-    private static List<CategoryDto> getDtoList() {
-        List<CategoryDto> expected = new ArrayList<>();
-        expected.add(createCategoryDto(1L, "lol info1", "some description1"));
-        expected.add(createCategoryDto(2L, "lol info2", "some description2"));
-        expected.add(createCategoryDto(3L, "lol info3", "some description3"));
-        expected.add(createCategoryDto(4L, "lol info4", "some description4"));
-        return expected;
     }
 }
