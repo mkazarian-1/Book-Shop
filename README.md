@@ -64,8 +64,8 @@ The **Book Shop API** is a RESTful web service designed to manage books, categor
 ## 🛠️ Setup & Installation
 ### Prerequisites
 - Java 21
-- Maven
-- MySQL installed and running
+- Maven 3.3.3
+- MySQL 8.3.0 (installed and running)
 
 ### Steps
 1. **Clone the Repository**
@@ -103,23 +103,47 @@ Make sure you have **Docker** and **Docker Compose** installed.
    cd book-shop
    ```
 
-2. **Build and start the services:**
+2. **Set Up Environment Variables**
+   Create a `.env` file in the root directory of the project and specify the following variables:
+   ```env
+   # Database Configuration
+   MYSQL_DATABASE=book_shop
+   MYSQL_USER=your_username
+   MYSQL_PASSWORD=your_password
+   MYSQL_ROOT_PASSWORD=your_root_password
+
+   # Spring Boot Application Configuration
+   SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/book_shop
+   SPRING_DATASOURCE_USERNAME=your_username
+   SPRING_DATASOURCE_PASSWORD=your_password
+   JWT_SECRET=your_random_secret_key_at_least_32_bytes_long
+   JWT_EXPIRATION=1000000
+
+   MYSQLDB_USER=root
+   MYSQLDB_PASSWORD=root
+   MYSQLDB_DATABASE=book_shop
+   MYSQLDB_LOCAL_PORT=3307
+   MYSQLDB_DOCKER_PORT=3306
+   
+   SPRING_LOCAL_PORT=8088
+   SPRING_DOCKER_PORT=8080
+   DEBUG_PORT=5005
+   ```
+
+3. **Build and start the services:**
 
    ```bash
    docker-compose up --build -d
    ```
 
-3. **Verify the containers are running:**
+4. **Verify the containers are running:**
 
    ```bash
    docker ps
    ```
    
-4. **Access the API at:**
+5. **Access the API at:**
 
    ```
    http://localhost:8080/swagger-ui/index.html
    ```
-
-## 🛠️ API Testing with Postman
-You can import the provided Postman collection to test the API. Simply open Postman and import `postman_collection.json`.
