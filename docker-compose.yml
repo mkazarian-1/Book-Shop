@@ -5,7 +5,7 @@ services:
     platform: linux/x86_64
     image: mysql:8.0
     restart: unless-stopped
-    env_file: ./.env
+    env_file: .env.template
     environment:
       MYSQL_ROOT_PASSWORD: $MYSQLDB_PASSWORD
       MYSQL_DATABASE: $MYSQLDB_DATABASE
@@ -18,7 +18,7 @@ services:
     restart: on-failure
     image: book-shop-api
     build: .
-    env_file: ./.env
+    env_file: .env.template
     ports:
       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
       - $DEBUG_PORT:$DEBUG_PORT

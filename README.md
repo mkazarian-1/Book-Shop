@@ -106,12 +106,6 @@ Make sure you have **Docker** and **Docker Compose** installed.
 2. **Set Up Environment Variables**
    Create a `.env` file in the root directory of the project and specify the following variables:
    ```env
-   # Database Configuration
-   MYSQL_DATABASE=book_shop
-   MYSQL_USER=your_username
-   MYSQL_PASSWORD=your_password
-   MYSQL_ROOT_PASSWORD=your_root_password
-
    # Spring Boot Application Configuration
    SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/book_shop
    SPRING_DATASOURCE_USERNAME=your_username
