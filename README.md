@@ -96,7 +96,7 @@ The **Book Shop API** is a RESTful web service designed to manage books, categor
 
 Make sure you have **Docker** and **Docker Compose** installed.
 
-1. **Create docker image:**
+1. **Clone the Repository**
 
    ```bash
    git clone https://github.com/mkazarian-1/Book-Shop.git
@@ -141,3 +141,11 @@ Make sure you have **Docker** and **Docker Compose** installed.
    ```
    http://localhost:8080/swagger-ui/index.html
    ```
+   
+## 📃 Postman documentation:
+   ```
+   https://www.postman.com/nordic-nest-shop-api-team/workspace/book-shop-api/request/38145897-6d8d1c09-6dee-4bcf-97c6-66b8bbe00fb5?action=share&creator=38145897&ctx=documentation
+   ```
+
+## Module diagram:
+![img.png](img.png)
