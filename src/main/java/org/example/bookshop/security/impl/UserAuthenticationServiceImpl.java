@@ -54,6 +54,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDto.getEmail(), loginRequestDto.getPassword())
         );
+
         return new UserLoginResponseDto(jwtUtil.generateToken(authentication.getName()));
     }
 }
